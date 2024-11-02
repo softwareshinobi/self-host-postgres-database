@@ -1,0 +1,57 @@
+services:
+
+##########################################
+##
+## relational data
+##
+##########################################
+
+    postgres-database-server:
+
+        container_name: postgres-database-server
+        
+        image: postgres:14.1-alpine
+
+        restart: unless-stopped
+
+        ports:
+
+            - "5432:5432"
+
+        volumes: 
+
+            - /volumes/database:/var/lib/postgresql/data
+
+        environment: 
+
+            - POSTGRES_DB=shinobi
+
+            - POSTGRES_USER=shinobi
+
+            - POSTGRES_PASSWORD=shinobi
+
+    postgres-database-admin:
+
+        container_name: postgres-database-admin
+
+        image: dpage/pgadmin4
+
+        restart: unless-stopped
+
+        depends_on:
+
+            - postgres-database-server
+        
+        ports:
+        
+            - "5480:80"
+            
+        volumes:
+
+            - /volumes/database:/var/lib/pgadmin            
+
+        environment:
+        
+            PGADMIN_DEFAULT_EMAIL: user@loremipsum.com
+            
+            PGADMIN_DEFAULT_PASSWORD: shinobi
